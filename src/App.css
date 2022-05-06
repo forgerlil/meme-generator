@@ -12,14 +12,22 @@
   align-items: center;
 }
 
-.meme-img {
-  max-width: 40vw;
-  max-height: 80vh;
+.meme-wrapper {
+  position: relative;
 }
 
-.meme-wrapper {
-  
+.meme-img {
+  position: absolute;
+  max-width: 40vw;
+  max-height: 80vh;
+  z-index: -1;
 }
+
+.input-wrapper {
+  position: relative;
+  display: flex;
+}
+
 
 .top-text,
 .bottom-text {

@@ -2,23 +2,24 @@ import './App.css';
 import { useState, useEffect } from 'react'
 import imgFetch from './APIs/meme-img-fetch'
 
-const randomMeme = Math.floor(Math.random()* 100);
-
 function App() {
   const [ memeImgs, setMemeImgs ] = useState(false);
   const [ firstText, setFirstText ] = useState('');
   const [ secondText, setSecondText ] = useState('');
+  const [ currentMeme, setCurrentMeme ] = useState(false)
+
+  const randomMeme = () => Math.floor(Math.random()* 100);
 
   const goBack = () => {
-    alert(`Going back...`)
+    setCurrentMeme(prev => prev - 1)
   }
 
   const goNext = () => {
-    alert(`Going forward...`)
+    setCurrentMeme(prev => prev + 1)
   }
 
   const goRandom = () => {
-    alert(`Selecting a random meme...`)
+    setCurrentMeme(randomMeme())
   }
 
   const topText = (e) => {
@@ -35,7 +36,8 @@ function App() {
   useEffect(() => {
   // When passing a function as a parameter for another function, don't call the function when passing
   // function(parameterFunc) and NOT function(parameterFunc())
-    imgFetch(setMemeImgs)
+    imgFetch(setMemeImgs);
+    setCurrentMeme(randomMeme())
   }, [])
 
   return (
@@ -44,18 +46,22 @@ function App() {
       <div className="meme-wrapper">
         <p className="top-text">{firstText}</p>
         <p className="bottom-text">{secondText}</p>
-        <img className="meme-img" src={memeImgs[randomMeme].url} alt={memeImgs[randomMeme].name} />
+        <img className="meme-img" src={memeImgs[currentMeme].url} alt={memeImgs[currentMeme].name} />
       </div>
-      <div className="input-wrapper">
-        <h3>{memeImgs[randomMeme].name}</h3>
-        <label for="top-text-input">Top text</label>
-        <input className="" type="text" name="top-text" id="top-text-input" onChange={topText} />
-        <label for="bottom-text-input">Bottom text</label>
-        <input className="" type="text" name="bottom-text" id="bottom-text-input" onChange={bottomText} />
+      <div className="wrapper">
+        <h3>{currentMeme + 1}. {memeImgs[currentMeme].name}</h3>
+        <div className="input=wrapper">
+          <label htmlFor="top-text-input">Top text</label>
+          <input className="" type="text" name="top-text" id="top-text-input" onChange={topText} />
+          <label htmlFor="bottom-text-input">Bottom text</label>
+          <input className="" type="text" name="bottom-text" id="bottom-text-input" onChange={bottomText} />
+        </div>
+        <div className="buttons-wrapper">
+          <button disabled={currentMeme <= 0} onClick={goBack}>Previous Meme</button>
+          <button onClick={goRandom}>Random Meme</button>
+          <button disabled={currentMeme >= 99} onClick={goNext}>Next Meme</button>
       </div>
-      <button onClick={goBack}>Previous Meme</button>
-      <button onClick={goNext}>Next Meme</button>
-      <button onClick={goRandom}>Random Meme</button>
+      </div>
     </div>
   );
 }
